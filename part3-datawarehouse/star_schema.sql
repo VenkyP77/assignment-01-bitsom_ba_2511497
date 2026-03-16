@@ -2,9 +2,7 @@
 -- Star Schema for Retail Transactions Data Warehouse
 -- ============================================================
 
--- ============================================================
 -- DIMENSION TABLES
--- ============================================================
 
 -- dim_date: Date dimension for time-based analysis
 CREATE TABLE dim_date (
@@ -33,9 +31,7 @@ CREATE TABLE dim_product (
     category VARCHAR(50) NOT NULL
 );
 
--- ============================================================
 -- FACT TABLE
--- ============================================================
 
 -- fact_sales: Central fact table with foreign keys and measures
 CREATE TABLE fact_sales (
@@ -53,12 +49,10 @@ CREATE TABLE fact_sales (
     FOREIGN KEY (product_key) REFERENCES dim_product(product_key)
 );
 
--- ============================================================
 -- INSERT DIMENSION DATA
--- ============================================================
 
 -- Data Cleaning Notes:
---   1. Dates standardized to YYYY-MM-DD (ISO 8601 / SQL standard) from mixed formats (DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD)
+--   1. Dates standardized to YYYY-MM-DD (SQL standard) from mixed formats (DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD)
 --   2. NULL store_city values inferred from store_name (e.g., "Chennai Anna" -> "Chennai")
 --   3. Category casing standardized: "electronics" -> "Electronics", "Grocery" -> "Groceries"
 
@@ -105,22 +99,7 @@ INSERT INTO dim_product (product_key, product_name, category) VALUES
 (15, 'Oil 1L',      'Groceries'),
 (16, 'Rice 5kg',    'Groceries');
 
--- ============================================================
 -- INSERT FACT DATA (12 cleaned sample rows)
--- ============================================================
--- Cleaning applied per row:
---   TXN5000: date "29/08/2023" -> "2023-08-29", category "electronics" -> "Electronics"
---   TXN5001: date "12-12-2023" -> "2023-12-12"
---   TXN5002: date already "2023-02-05", no issues
---   TXN5003: date "20-02-2023" -> "2023-02-20"
---   TXN5004: date already "2023-01-15", category "electronics" -> "Electronics"
---   TXN5005: date already "2023-08-09", no issues
---   TXN5007: date already "2023-10-26", no issues
---   TXN5008: date already "2023-12-08", no issues
---   TXN5010: date already "2023-06-04", no issues
---   TXN5012: date already "2023-05-21", no issues
---   TXN5014: date already "2023-11-18", no issues
---   TXN5029: date already "2023-01-11", no issues
 
 INSERT INTO fact_sales (sale_key, date_key, store_key, product_key, transaction_id, customer_id, units_sold, unit_price, total_amount) VALUES
 (1,  20230829, 1, 1,  'TXN5000', 'CUST045',  3, 49262.78, 147788.34),
